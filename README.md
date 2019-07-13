@@ -1,5 +1,5 @@
-## csgo_st
-# Counter Strike: Global Offensive Song Transmitter
+# csgo_st
+## Counter Strike: Global Offensive Song Transmitter
 
 # Dependencies
 
