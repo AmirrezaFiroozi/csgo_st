@@ -12,9 +12,13 @@
 # Usage
 
 -d: default behaviour, choose songs and play them
+
 -a: append, Append to the current songs list
--n: next song, Play the next song 
--p: Previous song, Play the previous song 
+
+-n: next song, Play the next song
+
+-p: Previous song, Play the previous song
+
 -w: Write cfg, Writes the necessary config file in csgo config directory
 
 # Todo
