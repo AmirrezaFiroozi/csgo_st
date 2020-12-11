@@ -19,36 +19,42 @@ set -o pipefail
 
 
 CSGO_PATH="$HOME/.local/share/Steam/steamapps/common/Counter-Strike Global Offensive"
+CSGO_ST_DATA_PATH="$HOME/Music/.csgo_st"
 APPEND=false
 function selectSongs(){
     FILES=$(zenity --file-selection --multiple --separator=$'\n' --title="select your songs")
     case $? in
              0)
                 if [ "$APPEND" == "true" ]; then
-                    echo "$FILES" >> "$HOME/.csgo_st/songs_list"
+                    echo "$FILES" >> "$CSGO_ST_DATA_PATH/songs_list"
                 else
-                    echo "1" > "$HOME/.csgo_st/current_song_index"
-                    echo "$FILES" > "$HOME/.csgo_st/songs_list"
+                    echo "1" > "$CSGO_ST_DATA_PATH/current_song_index"
+                    echo "$FILES" > "$CSGO_ST_DATA_PATH/songs_list"
                 fi
                 ;;
     esac
 }
 function playSong(){
-    INDEX=$(cat "$HOME/.csgo_st/current_song_index")
-    FILE=$(sed -n ${INDEX}p "$HOME/.csgo_st/songs_list" )
+    INDEX=$(cat "$CSGO_ST_DATA_PATH/current_song_index")
+    FILE=$(sed -n ${INDEX}p "$CSGO_ST_DATA_PATH/songs_list" )
     sox "$FILE" -b 16 -r 22050 -c 1 -t wavpcm /tmp/voice_input.wav 
     cp -r /tmp/voice_input.wav "$CSGO_PATH"
+    FILENAME=$(basename "${FILE}" )
+    echo "say ${FILENAME}; echo ${FILENAME}" > "$CSGO_ST_DATA_PATH/current_track.cfg"
+    cat "$CSGO_ST_DATA_PATH/songs_list" | sed 's/\(.*\)\/\(.*\)\.\(.*\)$/"\2" /g' | nl | sed 's/^/echo/g' > "$CSGO_ST_DATA_PATH/track_list.cfg"
+    echo "exec current_track.cfg" >> "$CSGO_ST_DATA_PATH/track_list.cfg"
+#notify-send "$FILENAME"
 }
 function write_cfg(){
-    echo -e "clear\nvoice_modenable 1\n bind \"/\" music_on\n alias music_on \"voice_inputfromfile 1;+voicerecord; voice_loopback 1; bind / music_off\" 
+    echo -e "alias track \"exec current_track.cfg\" \n alias tracks \" exec track_list.cfg\"\n clear\nvoice_modenable 1\n bind \"/\" music_on\n alias music_on \"voice_inputfromfile 1;+voicerecord; voice_loopback 1; exec current_track.cfg ; bind / music_off\" 
         \n alias music_off \"voice_inputfromfile 0;-voicerecord; voice_loopback 0; bind / music_on\" 
         \n clear\n echo 'csgo_st is successfully loaded. Use slash to toggle your song on and off' " > /tmp/csgo_st.cfg 
         chmod +x "/tmp/csgo_st.cfg"
         cp "/tmp/csgo_st.cfg" "$CSGO_PATH/csgo/cfg/csgo_st.cfg"
         rm "/tmp/csgo_st.cfg"
 }
-if [ ! -d "$HOME/.csgo_st" ]; then 
-    mkdir "$HOME/.csgo_st"
+if [ ! -d "$CSGO_ST_DATA_PATH" ]; then 
+    mkdir -p "$CSGO_ST_DATA_PATH"
 fi
 #append, next, previous, default, write_cfg
 while getopts 'anpdw' OPTION; do
@@ -58,24 +64,24 @@ while getopts 'anpdw' OPTION; do
             selectSongs
             ;;
         n)
-            TOTAL_SONG_COUNT=$(cat "$HOME/.csgo_st/songs_list" | wc -l)
-            INDEX=$(cat "$HOME/.csgo_st/current_song_index")
+            TOTAL_SONG_COUNT=$(cat "$CSGO_ST_DATA_PATH/songs_list" | wc -l)
+            INDEX=$(cat "$CSGO_ST_DATA_PATH/current_song_index")
             if [ "$INDEX" == "$TOTAL_SONG_COUNT" ]; then
                 INDEX=1
-                echo "$INDEX" > "$HOME/.csgo_st/current_song_index"
+                echo "$INDEX" > "$CSGO_ST_DATA_PATH/current_song_index"
             else
-                echo "$((INDEX + 1))" > "$HOME/.csgo_st/current_song_index"        
+                echo "$((INDEX + 1))" > "$CSGO_ST_DATA_PATH/current_song_index"        
             fi
             playSong
             ;;
         p)
-            TOTAL_SONG_COUNT=$(cat "$HOME/.csgo_st/songs_list" | wc -l)
-            INDEX=$(cat "$HOME/.csgo_st/current_song_index")
+            TOTAL_SONG_COUNT=$(cat "$CSGO_ST_DATA_PATH/songs_list" | wc -l)
+            INDEX=$(cat "$CSGO_ST_DATA_PATH/current_song_index")
             if [ "$INDEX" == "1" ];then
                 INDEX=$TOTAL_SONG_COUNT
-                echo "$INDEX" > "$HOME/.csgo_st/current_song_index"
+                echo "$INDEX" > "$CSGO_ST_DATA_PATH/current_song_index"
             else
-                echo "$((INDEX - 1))" > "$HOME/.csgo_st/current_song_index"        
+                echo "$((INDEX - 1))" > "$CSGO_ST_DATA_PATH/current_song_index"        
             fi
             playSong
             ;;
