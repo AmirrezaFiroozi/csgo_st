@@ -2,15 +2,21 @@
 Counter Strike: Global Offensive Song Transmitter
 
 # Dependencies
-*sox
-*sed
-*wc
-*zenity
+
+*sox*
+
+*sed*
+
+*wc*
+
+*zenity*
 
 ## Disclaimer
 
 *csgo_st* is not a cheat and will not get you banned.
+
 That said, I'm in no way responsible for your getting banned.
+
 If you ever do please do not blame it on csgo_st.
 
 # Usage
@@ -37,7 +43,9 @@ Type `tracks` in console to view your playlist in console
 ![ingame03](./images/ingame03.png)
 
 Press forward slash `/` to play the song or stop it after it has started playing
+
 When the song is playing you cannot use your microphone in game.
+
 if you ever accidentally press your microphone bind key (the default is K; V is also popular),
 you will need to press slash to start and stop the song before trying to talk
 ![ingame04](./images/ingame04.png)
