@@ -40,9 +40,9 @@ function playSong(){
     sox "$FILE" -b 16 -r 22050 -c 1 -t wavpcm /tmp/voice_input.wav 
     cp -r /tmp/voice_input.wav "$CSGO_PATH"
     FILENAME=$(basename "${FILE}" )
-    echo "say ${FILENAME}; echo ${FILENAME}" > "$CSGO_ST_DATA_PATH/current_track.cfg"
+    echo "say ${FILENAME}; echo ${FILENAME}" > "$CSGO_PATH/csgo/cfg/current_track.cfg"
     cat "$CSGO_ST_DATA_PATH/songs_list" | sed 's/\(.*\)\/\(.*\)\.\(.*\)$/"\2" /g' | nl | sed 's/^/echo/g' > "$CSGO_ST_DATA_PATH/track_list.cfg"
-    echo "exec current_track.cfg" >> "$CSGO_ST_DATA_PATH/track_list.cfg"
+    echo "exec current_track.cfg" >> "$CSGO_PATH/csgo/cfg/track_list.cfg"
 #notify-send "$FILENAME"
 }
 function write_cfg(){
