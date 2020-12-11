@@ -33,14 +33,17 @@ If you ever do please do not blame it on csgo_st.
 
 # Ingame Usage
 Type `exec csgo_st` in console to enable csgo_st
-![ingame01](./images/ingame01.png)
+
+![ingame01](./images/ingame01.jpg)
 
 Type `track` in console to view the current song both in console and in chat
-![ingame02](./images/ingame02.png)
+
+![ingame02](./images/ingame02.jpg)
 
 Type `tracks` in console to view your playlist in console
 `tracks` also calls `track` and tells you the current song
-![ingame03](./images/ingame03.png)
+
+![ingame03](./images/ingame03.jpg)
 
 Press forward slash `/` to play the song or stop it after it has started playing
 
@@ -48,7 +51,8 @@ When the song is playing you cannot use your microphone in game.
 
 if you ever accidentally press your microphone bind key (the default is K; V is also popular),
 you will need to press slash to start and stop the song before trying to talk
-![ingame04](./images/ingame04.png)
+
+![ingame04](./images/ingame04.jpg)
 
 # Tips
 
